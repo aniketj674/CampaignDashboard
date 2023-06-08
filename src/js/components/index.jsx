@@ -36,7 +36,6 @@ function Dashboard() {
     const [userData, setUserdata] = useState([]);
     const [showPopUp, setShowPopUp] = useState(false);
     const [emptyTable, setEmptyTable] = useState(false);
-    const [showTable, setShowTable] = useState(true);
     const startDate = useSelector(state => state.startDate);
     const endDate = useSelector(state => state.endDate);
     const searchedValue = useSelector(state => state.searchedValue);
@@ -70,10 +69,20 @@ function Dashboard() {
         setShowPopUp(false);
 
         if(startDate && endDate) {
-            setShowTable(true);
             filteredRows = filteredRows.filter((row) => {
                 return ((Date.parse(row.startDate)>=startDate && Date.parse(row.startDate)<=endDate) || ((Date.parse(row.endDate)>=startDate && Date.parse(row.endDate)<=endDate)));
             });
+        } else {
+            if(startDate) {
+                filteredRows = filteredRows.filter((row) => {
+                    return (Date.parse(row.startDate)>=startDate);
+                });
+            }
+            if(endDate) {
+                filteredRows = filteredRows.filter((row) => {
+                    return (Date.parse(row.endDate)<=endDate);
+                });
+            }
         }
         
         filteredRows = filteredRows.filter((row) => {
